@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feat/logout
 
 jobs:
   build-and-deploy:
