@@ -10,6 +10,7 @@ import TagsCategories from "../add-product/side-components/TagsCategories";
 import PlatformCategories from "../add-product/side-components/PlatformCategories";
 import ProductImages from "../add-product/side-components/ProductImages";
 import SystemRequirements from "./System-Requirement";
+import { set } from "date-fns";
 
 interface EditAllProductsPopupProps {
   product: AllProductsNew | null;
@@ -27,35 +28,36 @@ const EditAllProductsPopup: React.FC<EditAllProductsPopupProps> = ({
   const [editedProduct, setEditedProduct] =
     React.useState<AllProductsNew | null>(product);
 
-  const [platform, setPlatform] = useState("");
-  const [brand, setBrand] = useState("");
-  const [categories, setCategories] = useState<string[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
+  const [platform, setPlatform] = useState(product?.platform || "");
+  const [brand, setBrand] = useState(product?.brand || "");
+  const [categories, setCategories] = useState<string[]>(product?.categories || []);
+  const [tags, setTags] = useState<string[]>(product?.tags || []);
 
   //image data inputs
   const [imageUrl, setImageUrl] = useState("");
-  const [coverImage, setCoverImage] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
-  const [galleryImages, setGalleryImages] = useState<string[]>([]);
-  const [cardImage, setCardImage] = useState("");
-  const [latestImage, setLatestImage] = useState("");
-  const [addToLatestGame, setAddToLatestGame] = useState(false);
-  const [carousel, setCarousel] = useState(false);
-  const [displayLatestGame, setDisplayLatestGame] = useState(false);
+  const [coverImage, setCoverImage] = useState(product?.coverImage || "");
+  const [videoUrl, setVideoUrl] = useState(product?.videoUrl || "");
+  const [galleryImages, setGalleryImages] = useState<string[]>(product?.galleryImages || []);
+  const [cardImage, setCardImage] = useState(product?.cardImage || "");
+  const [latestImage, setLatestImage] = useState(product?.latestImage || "");
+  const [addToLatestGame, setAddToLatestGame] = useState(product?.addToLatestGame || false);
+  const [carousel, setCarousel] = useState(product?.carousel || false);
+  const [displayLatestGame, setDisplayLatestGame] = useState(product?.displayLatestGame || false);
 
   // system requirements
-  const [minimumOS, setMinimumOS] = useState("");
-  const [minimumCPU, setMinimumCPU] = useState("");
-  const [minimumRAM, setMinimumRAM] = useState("");
-  const [minimumStorage, setMinimumStorage] = useState("");
-  const [minimumGPU, setMinimumGPU] = useState("");
-  const [recommendedOS, setRecommendedOS] = useState("");
-  const [recommendedCPU, setRecommendedCPU] = useState("");
-  const [recommendedRAM, setRecommendedRAM] = useState("");
-  const [recommendedStorage, setRecommendedStorage] = useState("");
-  const [recommendedGPU, setRecommendedGPU] = useState("");
+  const [minimumOS, setMinimumOS] = useState(product?.minimumOS || "");
+  const [minimumCPU, setMinimumCPU] = useState(product?.minimumCPU || "");
+  const [minimumRAM, setMinimumRAM] = useState(product?.minimumRAM || "");
+  const [minimumStorage, setMinimumStorage] = useState(product?.minimumStorage || "");
+  const [minimumGPU, setMinimumGPU] = useState(product?.minimumGPU || "");
+  const [recommendedOS, setRecommendedOS] = useState(product?.recommendedOS || "");
+  const [recommendedCPU, setRecommendedCPU] = useState(product?.recommendedCPU || "");
+  const [recommendedRAM, setRecommendedRAM] = useState(product?.recommendedRAM || "");
+  const [recommendedStorage, setRecommendedStorage] = useState(product?.recommendedStorage || "");
+  const [recommendedGPU, setRecommendedGPU] = useState(product?.recommendedGPU || "");
 
   React.useEffect(() => {
+    console.log("product", product);
     setEditedProduct(product);
   }, [product]);
 
@@ -88,7 +90,8 @@ const EditAllProductsPopup: React.FC<EditAllProductsPopupProps> = ({
 
   const handleSave = () => {
     if (editedProduct) {
-      onSave(editedProduct);
+      // onSave(editedProduct);
+      console.log("editedProduct", editedProduct);
     }
   };
 
@@ -118,6 +121,13 @@ const EditAllProductsPopup: React.FC<EditAllProductsPopupProps> = ({
               <label className="block mb-[0.5em]">Display Name</label>
               <input
                 type="text"
+                value={editedProduct.displayName}
+                onChange={(e) => {
+                  setEditedProduct({
+                    ...editedProduct,
+                    displayName: e.target.value,
+                  });
+                }}
                 className="w-full bg-transparent px-[1em] py-[0.5em] text-white border border-[#606060] rounded-sm"
               />
             </div>
@@ -128,6 +138,14 @@ const EditAllProductsPopup: React.FC<EditAllProductsPopupProps> = ({
             <label className="block mb-[0.5em]">About This Game</label>
             <textarea
               className="w-full bg-transparent px-[1em] py-[0.5em] text-white border border-[#606060] rounded-sm"
+              value={editedProduct.about}
+              onChange={(e)=> {
+                setEditedProduct({
+                  ...editedProduct,
+                  about: e.target.value,
+                });
+              }
+              }
               rows={4}
             />
           </div>
@@ -137,6 +155,13 @@ const EditAllProductsPopup: React.FC<EditAllProductsPopupProps> = ({
             <label className="block mb-[0.5em]">Card Description</label>
             <input
               type="text"
+              value={editedProduct.cardDescription}
+              onChange={(e)=>{
+                setEditedProduct({
+                  ...editedProduct,
+                  cardDescription: e.target.value,
+                });
+              }}
               className="w-full bg-transparent px-[1em] py-[0.5em] text-white border border-[#606060] rounded-sm"
             />
           </div>
@@ -214,6 +239,14 @@ const EditAllProductsPopup: React.FC<EditAllProductsPopupProps> = ({
               <label className="block mb-[0.5em]">Sale Quantity</label>
               <input
                 type="text"
+                value={editedProduct.saleQuantity}
+                onChange={(e)=>{
+                  setEditedProduct({
+                    ...editedProduct,
+                    saleQuantity: Number(e.target.value),
+                  });
+                }
+                }
                 className="w-full bg-transparent px-[1em] py-[0.5em] text-white border border-[#606060] rounded-sm"
                 required
               />
@@ -254,45 +287,136 @@ const EditAllProductsPopup: React.FC<EditAllProductsPopupProps> = ({
         {/* Image upload */}
         <div>
           <ProductImages
-            coverImage={coverImage}
-            setCoverImage={setCoverImage}
-            videoUrl={videoUrl}
-            setVideoUrl={setVideoUrl}
-            galleryImages={galleryImages}
-            setGalleryImages={setGalleryImages}
-            latestImage={latestImage}
-            setLatestImage={setLatestImage}
-            cardImage={cardImage}
-            setCardImage={setCardImage}
-            addToLatestGame={addToLatestGame}
-            setAddToLatestGame={setAddToLatestGame}
-            carousel={carousel}
-            setCarousel={setCarousel}
-            displayLatestGame={displayLatestGame}
-            setDisplayLatestGame={setDisplayLatestGame}
+            coverImage={editedProduct.coverImage}
+            setCoverImage={(url) => {
+              setEditedProduct({
+          ...editedProduct,
+          coverImage: url,
+              });
+            }}
+            videoUrl={editedProduct.videoUrl}
+            setVideoUrl={(url) => {
+              setEditedProduct({
+          ...editedProduct,
+          videoUrl: url,
+              });
+            }}
+            galleryImages={editedProduct.galleryImages}
+          setGalleryImages={(images: string[] | ((prevUrls: string[]) => string[])) => {
+            const updatedImages = typeof images === 'function' ? images(editedProduct.galleryImages) : images;
+            setEditedProduct({
+              ...editedProduct,
+              galleryImages: updatedImages,
+            });
+          }}
+            latestImage={editedProduct.latestImage}
+            setLatestImage={(url) => {
+              setEditedProduct({
+          ...editedProduct,
+          latestImage: url,
+              });
+            }}
+            cardImage={editedProduct.cardImage}
+            setCardImage={(url) => {
+              setEditedProduct({
+          ...editedProduct,
+          cardImage: url,
+              });
+            }}
+            addToLatestGame={editedProduct.addToLatestGame}
+            setAddToLatestGame={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          addToLatestGame: value,
+              });
+            }}
+            carousel={editedProduct.carousel}
+            setCarousel={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          carousel: value,
+              });
+            }}
+            displayLatestGame={editedProduct.displayLatestGame}
+            setDisplayLatestGame={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          displayLatestGame: value,
+              });
+            }}
           />
 
           <SystemRequirements
-            minimumOS={minimumOS}
-            setMinimumOS={setMinimumOS}
-            minimumCPU={minimumCPU}
-            setMinimumCPU={setMinimumCPU}
-            minimumRAM={minimumRAM}
-            setMinimumRAM={setMinimumRAM}
-            minimumStorage={minimumStorage}
-            setMinimumStorage={setMinimumStorage}
-            minimumGPU={minimumGPU}
-            setMinimumGPU={setMinimumGPU}
-            recommendedOS={recommendedOS}
-            setRecommendedOS={setRecommendedOS}
-            recommendedCPU={recommendedCPU}
-            setRecommendedCPU={setRecommendedCPU}
-            recommendedRAM={recommendedRAM}
-            setRecommendedRAM={setRecommendedRAM}
-            recommendedStorage={recommendedStorage}
-            setRecommendedStorage={setRecommendedStorage}
-            recommendedGPU={recommendedGPU}
-            setRecommendedGPU={setRecommendedGPU}
+            minimumOS={editedProduct.minimumOS}
+            setMinimumOS={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          minimumOS: value,
+              });
+            }}
+            minimumCPU={editedProduct.minimumCPU}
+            setMinimumCPU={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          minimumCPU: value,
+              });
+            }}
+            minimumRAM={editedProduct.minimumRAM}
+            setMinimumRAM={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          minimumRAM: value,
+              });
+            }}
+            minimumStorage={editedProduct.minimumStorage}
+            setMinimumStorage={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          minimumStorage: value,
+              });
+            }}
+            minimumGPU={editedProduct.minimumGPU}
+            setMinimumGPU={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          minimumGPU: value,
+              });
+            }}
+            recommendedOS={editedProduct.recommendedOS}
+            setRecommendedOS={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          recommendedOS: value,
+              });
+            }}
+            recommendedCPU={editedProduct.recommendedCPU}
+            setRecommendedCPU={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          recommendedCPU: value,
+              });
+            }}
+            recommendedRAM={editedProduct.recommendedRAM}
+            setRecommendedRAM={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          recommendedRAM: value,
+              });
+            }}
+            recommendedStorage={editedProduct.recommendedStorage}
+            setRecommendedStorage={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          recommendedStorage: value,
+              });
+            }}
+            recommendedGPU={editedProduct.recommendedGPU}
+            setRecommendedGPU={(value) => {
+              setEditedProduct({
+          ...editedProduct,
+          recommendedGPU: value,
+              });
+            }}
           />
         </div>
       </div>
@@ -320,21 +444,49 @@ const EditAllProductsPopup: React.FC<EditAllProductsPopupProps> = ({
         <div>
           <div className="mb-10">
             <ProductCategories
-              categories={categories}
-              setCategories={setCategories}
+              categories={editedProduct.categories}
+              setCategories={(categories) => {
+                setEditedProduct({
+                  ...editedProduct,
+                  categories,
+                });
+              }
+              }
+              selectedCategories={editedProduct.categories}
             />
           </div>
 
           <div className="mb-10">
-            <BrandCategories brand={brand} setBrand={setBrand} />
+            <BrandCategories brand={editedProduct.brand} setBrand={
+              (brand) => {
+                setEditedProduct({
+                  ...editedProduct,
+                  brand,
+                });
+              }
+            } />
           </div>
 
           <div className="mb-10">
-            <TagsCategories tagIds={tags} setTagIds={setTags} />
+            <TagsCategories tagIds={editedProduct.tags} setTagIds={
+              (tags) => {
+                setEditedProduct({
+                  ...editedProduct,
+                  tags,
+                });
+              }
+            } />
           </div>
 
           <div className="mb-10">
-            <PlatformCategories platform={platform} setPlatform={setPlatform} />
+            <PlatformCategories platform={editedProduct.platform} setPlatform={
+              (platform) => {
+                setEditedProduct({
+                  ...editedProduct,
+                  platform,
+                });
+              }
+            } />
           </div>
         </div>
 
